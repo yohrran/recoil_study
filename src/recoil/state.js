@@ -1,16 +1,29 @@
 import { atom, selector } from "recoil";
 
-export const textState = atom({
-  key: "textState",
-  default: "",
+export const todoListState = atom({
+  key: "todoListState",
+  default: [],
 });
 
-export const charCountState = selector({
-  key: "charCountState",
-  get: ({ get }) => {
-    const text = get(textState);
-    console.log(text);
+export const todoListFilterState = atom({
+  key: "todoListFilterState",
+  default: "Show All",
+});
 
-    return text.length;
+export const filteredTodoListState = selector({
+  key: "filteredTodoListState",
+  get: ({ get }) => {
+    const filter = get(todoListFilterState);
+    const list = get(todoListState);
+
+    console.log(filter);
+    switch (filter) {
+      case "Show Completed":
+        return list.filter((item) => item.isComplete);
+      case "Show Uncompleted":
+        return list.filter((item) => !item.isComplete);
+      default:
+        return list;
+    }
   },
 });
